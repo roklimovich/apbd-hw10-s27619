@@ -73,19 +73,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 After login, `AccountController.cs` creates a `ClaimsPrincipal` and calls `HttpContext.SignInAsync`. Logout calls `HttpContext.SignOutAsync`.
 
----
 
-## Protected Actions
-
-| Action / Controller             | Protection                                  |
-|---------------------------------|---------------------------------------------|
-| `DashboardController` (all)     | `[Authorize]` — any authenticated user      |
-| `AdminController` (all)         | `[Authorize(Roles = "Admin")]` — Admin only |
-| `AccountController.Logout`      | `[Authorize]` — must be authenticated       |
-
----
-
-## Security Q&A
+## Questions
 
 **Why must passwords not be stored as plain text?**
 If the database is compromised, attackers get every password immediately and can use them on other services (credential stuffing). Plain-text storage gives zero protection after a breach.
