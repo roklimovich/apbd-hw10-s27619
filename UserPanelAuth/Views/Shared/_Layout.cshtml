@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] – User Panel</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: #f5f7fa; color: #1a1a2e; min-height: 100vh; }
+        nav { background: #1a1a2e; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 56px; }
+        nav .brand { font-weight: 700; font-size: 1.1rem; color: #7c83fd; text-decoration: none; }
+        nav ul { list-style: none; display: flex; gap: 1.5rem; align-items: center; }
+        nav a { color: #c9d1d9; text-decoration: none; font-size: 0.9rem; transition: color .2s; }
+        nav a:hover { color: #fff; }
+        nav .btn-logout { background: #e74c3c; color: #fff; border: none; padding: .35rem .9rem; border-radius: 6px; cursor: pointer; font-size: .85rem; }
+        nav .btn-logout:hover { background: #c0392b; }
+        main { max-width: 900px; margin: 2.5rem auto; padding: 0 1rem; }
+        .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); padding: 2rem; margin-bottom: 1.5rem; }
+        h1 { font-size: 1.6rem; margin-bottom: 1.2rem; color: #1a1a2e; }
+        h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+        label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .3rem; color: #444; }
+        input[type=text], input[type=email], input[type=password], textarea {
+            width: 100%; padding: .55rem .8rem; border: 1.5px solid #dde; border-radius: 8px;
+            font-size: .95rem; margin-bottom: .2rem; transition: border-color .2s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #7c83fd; }
+        textarea { min-height: 100px; resize: vertical; }
+        .form-group { margin-bottom: 1rem; }
+        .btn { display: inline-block; padding: .55rem 1.4rem; border-radius: 8px; border: none; cursor: pointer; font-size: .95rem; font-weight: 600; text-decoration: none; transition: opacity .2s; }
+        .btn-primary { background: #7c83fd; color: #fff; }
+        .btn-primary:hover { opacity: .88; }
+        .btn-danger { background: #e74c3c; color: #fff; }
+        .btn-danger:hover { opacity: .88; }
+        .btn-sm { padding: .3rem .8rem; font-size: .8rem; }
+        .alert { padding: .8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: .9rem; }
+        .alert-danger { background: #ffeaea; border: 1px solid #f5c6c6; color: #c0392b; }
+        .alert-success { background: #eafaf1; border: 1px solid #a9dfbf; color: #1e8449; }
+        .alert-info { background: #eaf4fb; border: 1px solid #a9cce3; color: #1a5276; }
+        .validation-message, .field-validation-error { color: #e74c3c; font-size: .8rem; display: block; margin-bottom: .4rem; }
+        .badge { display: inline-block; padding: .2rem .6rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+        .badge-admin { background: #7c83fd22; color: #7c83fd; }
+        .badge-user { background: #eee; color: #555; }
+        table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+        th { text-align: left; padding: .7rem 1rem; background: #f5f7fa; font-weight: 600; color: #666; }
+        td { padding: .7rem 1rem; border-top: 1px solid #eee; }
+        .note-card { border: 1.5px solid #eee; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: .8rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .note-card .note-body h3 { font-size: 1rem; margin-bottom: .25rem; }
+        .note-card .note-body p { font-size: .88rem; color: #555; white-space: pre-wrap; }
+        .note-card .note-meta { font-size: .75rem; color: #999; margin-top: .4rem; }
+        .empty { text-align: center; padding: 2rem; color: #aaa; font-size: .95rem; }
+        .row { display: flex; gap: 1rem; }
+        @media(max-width:600px) { nav { flex-wrap: wrap; height: auto; padding: .5rem 1rem; gap: .5rem; } .row { flex-direction: column; } }
+    </style>
+</head>
+<body>
+<nav>
+    <a class="brand" href="/">🔐 UserPanel</a>
+    <ul>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <li><a href="/Dashboard">Dashboard</a></li>
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a href="/Admin" style="color:#7c83fd">Admin</a></li>
+            }
+            <li>
+                <form method="post" action="/Account/Logout" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </li>
+            <li style="color:#aaa;font-size:.8rem">@User.Identity.Name</li>
+        }
+        else
+        {
+            <li><a href="/Account/Login">Login</a></li>
+            <li><a href="/Account/Register">Register</a></li>
+        }
+    </ul>
+</nav>
+<main>
+    @if (TempData["Success"] is string msg)
+    {
+        <div class="alert alert-success">✔ @msg</div>
+    }
+    @RenderBody()
+</main>
+</body>
+</html>

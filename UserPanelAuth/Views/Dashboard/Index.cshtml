@@ -1,0 +1,56 @@
+@model List<UserNote>
+@{ ViewData["Title"] = "Dashboard"; }
+
+<div class="row" style="align-items:flex-start">
+    <div style="flex:1">
+        <div class="card">
+            <h1>My Dashboard</h1>
+            <p style="color:#666;font-size:.9rem;margin-bottom:1.5rem">
+                Welcome back, <strong>@User.Identity!.Name</strong>.
+                Your notes are private and visible only to you.
+            </p>
+
+            @if (!Model.Any())
+            {
+                <div class="empty">📝 No notes yet. Add your first one!</div>
+            }
+            else
+            {
+                foreach (var note in Model)
+                {
+                    <div class="note-card">
+                        <div class="note-body">
+                            <h3>@note.Title</h3>
+                            <p>@note.Content</p>
+                            <div class="note-meta">Added @note.CreatedAt.ToString("dd MMM yyyy, HH:mm")</div>
+                        </div>
+                        <form method="post" asp-action="DeleteNote" style="margin-left:1rem">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="noteId" value="@note.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Delete this note?')">Delete</button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div style="width:280px">
+        <div class="card">
+            <h2>Add Note</h2>
+            <form asp-action="AddNote" method="get">
+                <a href="/Dashboard/AddNote" class="btn btn-primary" style="display:block;text-align:center">+ New Note</a>
+            </form>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="card" style="border:2px solid #7c83fd">
+                <h2 style="color:#7c83fd">Admin Access</h2>
+                <p style="font-size:.85rem;color:#666;margin-bottom:.8rem">You have the Admin role.</p>
+                <a href="/Admin" class="btn btn-primary" style="display:block;text-align:center">Open Admin Panel</a>
+            </div>
+        }
+    </div>
+</div>

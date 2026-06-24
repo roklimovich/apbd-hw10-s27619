@@ -1,0 +1,34 @@
+@model RegisterViewModel
+@{ ViewData["Title"] = "Register"; }
+
+<div class="card" style="max-width:480px;margin:0 auto">
+    <h1>Create Account</h1>
+
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:@(ViewData.ModelState.IsValid ? "none" : "block")"></div>
+
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="email" autocomplete="email" placeholder="you@example.com" />
+            <span asp-validation-for="Email" class="validation-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password">Password <small style="font-weight:400;color:#999">(min. 8 characters)</small></label>
+            <input asp-for="Password" type="password" autocomplete="new-password" />
+            <span asp-validation-for="Password" class="validation-message"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <input asp-for="ConfirmPassword" type="password" autocomplete="new-password" />
+            <span asp-validation-for="ConfirmPassword" class="validation-message"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%">Register</button>
+    </form>
+
+    <p style="margin-top:1rem;font-size:.9rem;text-align:center">
+        Already have an account? <a href="/Account/Login">Log in</a>
+    </p>
+</div>

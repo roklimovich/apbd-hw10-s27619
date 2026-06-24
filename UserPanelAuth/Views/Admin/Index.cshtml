@@ -1,0 +1,39 @@
+@{ ViewData["Title"] = "Admin Panel"; }
+
+<div class="card">
+    <h1>🛡️ Admin Panel</h1>
+    <p style="color:#666;font-size:.9rem;margin-bottom:1.5rem">
+        This page is visible only to users with the <strong>Admin</strong> role.
+        Authorization is enforced on the controller via <code>[Authorize(Roles = "Admin")]</code> —
+        not by hiding a menu link.
+    </p>
+
+    <h2>Registered Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Notes</th>
+                <th>Registered</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in (dynamic)Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <span class="badge @(user.Role == "Admin" ? "badge-admin" : "badge-user")">
+                            @user.Role
+                        </span>
+                    </td>
+                    <td>@user.NoteCount</td>
+                    <td>@((DateTime)user.CreatedAt).ToString("dd MMM yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
